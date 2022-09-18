@@ -1,5 +1,10 @@
 import discord
+from discord.ext import commands
+
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -15,10 +20,13 @@ class MyClient(discord.Client):
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = MyClient(intents=intents)
+bot = MyClient(intents=intents)
+command = commands.Bot(command_prefix='>', intents=intents)
+
+@command.command()
+async def ping(ctx):
+    await ctx.send('safdasfsafsa')
 
 TOKEN = os.getenv('TOKEN')
 
-print(os.getenv('TOKEN'))
-
-#client.run()
+bot.run(TOKEN)
