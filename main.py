@@ -2,6 +2,8 @@ import discord
 import asyncio
 from discord.ext import commands
 
+import time
+
 import os
 from dotenv import load_dotenv
 
@@ -38,17 +40,23 @@ async def status(info):
     servs._info = info
 
 #commands
-@commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
 @bot.command()
-async def StartServer(bot):
-    if servs._info.lang == 'online' :
-        await bot.send('Server has already start on themincraftpros.aternos.me:45328')
-    elif servs._info.lang == 'loading' :
-        await bot.send('Server is starting pls wait!')
-    else:
-        servs.start()
-        await bot.send('Server has started on themincraftpros.aternos.me:45328')
+@commands.cooldown(1, 5, type=commands.BucketType.user)
+async def StartServer(ctx):
+    if servs._info:
+        if servs._info['lang'] == 'online':
+            await ctx.send('Server has already start on themincraftpros.aternos.me:45328')
+        if servs._info['lang'] == 'loading':
+            await ctx.send('Server is starting pls wait!')
+        if servs._info['lang'] == 'offline':
+            servs.start()
+            await ctx.send('Server has started on themincraftpros.aternos.me:45328')
 
+@StartServer.error
+async def test_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+	    await ctx.send("Please try again after "f"{round(error.retry_after, 1)} seconds")
 
 asyncio.run(socket.connect())
+
 bot.run(TOKEN)
