@@ -51,7 +51,6 @@ async def StartServer(ctx):
         if servs._info['lang'] == 'offline':
             servs.start()
             await ctx.send('Server has started on themincraftpros.aternos.me:45328')
-    await print(servs._info)
 
 @StartServer.error
 async def test_error(ctx, error):
