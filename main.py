@@ -38,6 +38,7 @@ async def status(info):
     servs._info = info
 
 #commands
+@commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
 @bot.command()
 async def StartServer(bot):
     if servs._info.lang == 'online' :
@@ -47,6 +48,7 @@ async def StartServer(bot):
     else:
         servs.start()
         await bot.send('Server has started on themincraftpros.aternos.me:45328')
+
 
 asyncio.run(socket.connect())
 bot.run(TOKEN)
